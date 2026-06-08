@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complete Engineer Roadmap</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-primary:#ffffff;--bg-secondary:#f5f5f4;--bg-tertiary:#f0efed;
+  --text-primary:#1a1a1a;--text-secondary:#6b6b6b;--text-tertiary:#9b9b9b;
+  --border-light:rgba(0,0,0,0.1);--border-medium:rgba(0,0,0,0.2);
+  --green:#1D9E75;--green-dark:#0F6E56;--green-light:#E1F5EE;
+  --radius-md:8px;--radius-lg:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg-primary:#1c1c1e;--bg-secondary:#2c2c2e;--bg-tertiary:#3a3a3c;
+    --text-primary:#f2f2f7;--text-secondary:#aeaeb2;--text-tertiary:#636366;
+    --border-light:rgba(255,255,255,0.1);--border-medium:rgba(255,255,255,0.2);
+    --green-light:#0a2e1f;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg-tertiary);color:var(--text-primary);min-height:100vh;padding:1rem}
+.wrap{max-width:780px;margin:0 auto;padding-bottom:4rem}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:8px}
+.topbar h1{font-size:20px;font-weight:600;color:var(--text-primary)}
+.export-btn{padding:7px 14px;border-radius:var(--radius-md);border:1px solid var(--border-medium);font-size:13px;cursor:pointer;background:var(--bg-primary);color:var(--text-primary);display:flex;align-items:center;gap:6px;transition:background 0.15s}
+.export-btn:hover{background:var(--bg-secondary)}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(95px,1fr));gap:8px;margin-bottom:1.25rem}
+.sc{background:var(--bg-secondary);border-radius:var(--radius-md);padding:10px 12px;text-align:center;border:1px solid var(--border-light)}
+.sc-num{font-size:20px;font-weight:600;color:var(--text-primary)}
+.sc-lbl{font-size:11px;color:var(--text-secondary);margin-top:2px}
+.global-bar-wrap{margin-bottom:1.5rem}
+.bar-track{background:var(--bg-secondary);border-radius:20px;height:8px;overflow:hidden;border:1px solid var(--border-light)}
+.bar-fill{height:100%;background:var(--green);border-radius:20px;transition:width 0.4s}
+.bar-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);margin-top:5px}
+.streak-row{display:flex;align-items:center;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.streak-box{background:var(--bg-secondary);border-radius:var(--radius-md);padding:8px 14px;font-size:13px;color:var(--text-primary);display:flex;align-items:center;gap:6px;border:1px solid var(--border-light)}
+.tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:1.25rem}
+.tab{padding:6px 13px;border-radius:20px;border:1px solid var(--border-light);font-size:12px;cursor:pointer;background:var(--bg-primary);color:var(--text-secondary);white-space:nowrap;transition:all 0.15s}
+.tab.on{background:var(--green);color:#fff;border-color:var(--green);font-weight:500}
+.tab .cnt{font-size:11px;margin-left:5px;opacity:0.8}
+.sec{display:none}.sec.on{display:block}
+.course-banner{background:var(--bg-secondary);border-radius:var(--radius-lg);padding:11px 14px;margin-bottom:8px;border:1px solid var(--border-light)}
+.cb-title{font-size:13px;font-weight:600;color:var(--text-primary)}
+.cb-sub{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.cb-link{font-size:12px;color:var(--green);text-decoration:none;display:inline-flex;align-items:center;gap:4px;margin-top:4px}
+.cb-link:hover{text-decoration:underline}
+.cert-pill{display:inline-block;font-size:11px;padding:2px 7px;border-radius:10px;background:var(--green-light);color:var(--green-dark);margin-left:6px;font-weight:500}
+.stack-pill{display:inline-block;font-size:11px;padding:2px 7px;border-radius:10px;margin-left:6px;font-weight:500}
+.pill-node{background:#EAF3DE;color:#3B6D11}
+.pill-spring{background:#E1F5EE;color:#085041}
+.pill-django{background:#E6F1FB;color:#0C447C}
+.pill-flask{background:#FAEEDA;color:#633806}
+@media(prefers-color-scheme:dark){
+  .pill-node{background:#1a3010;color:#7ec87e}
+  .pill-spring{background:#0a2e1f;color:#5dcaa5}
+  .pill-django{background:#0a1e3f;color:#85b7eb}
+  .pill-flask{background:#2e1a00;color:#ef9f27}
+}
+.sec-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:1rem}
+.sec-bar-track{flex:1;background:var(--bg-secondary);border-radius:10px;height:6px;overflow:hidden;border:1px solid var(--border-light)}
+.sec-bar-fill{height:100%;background:var(--green);border-radius:10px;transition:width 0.4s}
+.sec-pct{font-size:12px;color:var(--text-secondary);min-width:36px;text-align:right}
+.group-hd{font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.06em;margin:1rem 0 5px;padding-left:2px;display:flex;align-items:center;gap:6px}
+.items{display:flex;flex-direction:column;gap:4px;margin-bottom:4px}
+.item{display:flex;align-items:flex-start;gap:10px;padding:9px 12px;background:var(--bg-primary);border:1px solid var(--border-light);border-radius:var(--radius-md);cursor:pointer;transition:border-color 0.15s;user-select:none}
+.item:hover{border-color:var(--border-medium)}
+.item.done{opacity:0.55}
+.item.done .item-txt{text-decoration:line-through;color:var(--text-tertiary)}
+.cb2{width:17px;height:17px;border-radius:4px;border:1.5px solid var(--border-medium);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;transition:all 0.15s}
+.item.done .cb2{background:var(--green);border-color:var(--green)}
+.ck{display:none;font-size:11px;font-weight:700;color:#fff;line-height:1}
+.item.done .ck{display:block}
+.item-txt{font-size:13px;color:var(--text-primary);line-height:1.4;flex:1}
+.item-num{font-size:11px;color:var(--text-tertiary);flex-shrink:0;align-self:center;white-space:nowrap}
+.divider{height:1px;background:var(--border-light);margin:12px 0}
+.analytics-wrap{margin-top:2rem;background:var(--bg-primary);border-radius:var(--radius-lg);padding:1.25rem;border:1px solid var(--border-light)}
+.chart-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
+.chart-sub{font-size:12px;color:var(--text-secondary);margin-bottom:10px}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:10px;font-size:12px;color:var(--text-secondary)}
+.leg-dot{width:10px;height:10px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:1px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1>Complete Engineer Roadmap</h1>
+    <button class="export-btn" onclick="exportData()">&#8595; Export progress</button>
+  </div>
+  <div class="stats-row" id="statsRow"></div>
+  <div class="global-bar-wrap">
+    <div class="bar-track"><div class="bar-fill" id="globalFill" style="width:0%"></div></div>
+    <div class="bar-meta"><span id="globalTxt">0 / 0 done</span><span id="globalPct">0%</span></div>
+  </div>
+  <div class="streak-row" id="streakRow"></div>
+  <div class="tabs" id="tabsEl"></div>
+  <div id="sectionsEl"></div>
+  <div class="analytics-wrap">
+    <div class="chart-title">Daily progress &mdash; last 14 days</div>
+    <div class="chart-sub">Steps completed per day across all tracks</div>
+    <div class="legend">
+      <span><span class="leg-dot" style="background:#1D9E75"></span>Completed</span>
+      <span><span class="leg-dot" style="background:#378ADD"></span>Cumulative</span>
+    </div>
+    <div style="position:relative;width:100%;height:200px"><canvas id="dailyChart"></canvas></div>
+    <div class="chart-title" style="margin-top:1.5rem">Track completion</div>
+    <div class="legend" id="trackLegend"></div>
+    <div style="position:relative;height:240px"><canvas id="trackChart"></canvas></div>
+  </div>
+</div>
+<script>
+const TRACKS=[
+{id:"dsa",name:"DSA",
+courses:[{title:"NeetCode 150 — Blind 75 + Extended",url:"https://neetcode.io/practice",desc:"neetcode.io · Free · All Blind 75 + 75 more, pattern-organised — definitive SDE interview list",cert:false,pill:null}],
+groups:[
+{g:"Arrays & Hashing",items:["Contains Duplicate","Valid Anagram","Two Sum","Group Anagrams","Top K Frequent Elements","Encode and Decode Strings","Product of Array Except Self","Valid Sudoku","Longest Consecutive Sequence"]},
+{g:"Two Pointers",items:["Valid Palindrome","Two Sum II — Input Array Is Sorted","3Sum","Container With Most Water","Trapping Rain Water"]},
+{g:"Sliding Window",items:["Best Time to Buy and Sell Stock","Longest Substring Without Repeating Characters","Longest Repeating Character Replacement","Permutation in String","Minimum Window Substring","Sliding Window Maximum"]},
+{g:"Stack",items:["Valid Parentheses","Min Stack","Evaluate Reverse Polish Notation","Generate Parentheses","Daily Temperatures","Car Fleet","Largest Rectangle in Histogram"]},
+{g:"Binary Search",items:["Binary Search","Search a 2D Matrix","Koko Eating Bananas","Find Minimum in Rotated Sorted Array","Search in Rotated Sorted Array","Time Based Key-Value Store","Median of Two Sorted Arrays"]},
+{g:"Linked List",items:["Reverse Linked List","Merge Two Sorted Lists","Reorder List","Remove Nth Node From End of List","Copy List with Random Pointer","Add Two Numbers","Linked List Cycle","Find the Duplicate Number","LRU Cache","Merge K Sorted Lists","Reverse Nodes in K-Group"]},
+{g:"Trees",items:["Invert Binary Tree","Maximum Depth of Binary Tree","Diameter of Binary Tree","Balanced Binary Tree","Same Tree","Subtree of Another Tree","Lowest Common Ancestor of BST","Binary Tree Level Order Traversal","Binary Tree Right Side View","Count Good Nodes in Binary Tree","Validate Binary Search Tree","Kth Smallest Element in BST","Construct Binary Tree from Preorder and Inorder","Binary Tree Maximum Path Sum","Serialize and Deserialize Binary Tree"]},
+{g:"Tries",items:["Implement Trie (Prefix Tree)","Design Add and Search Words Data Structure","Word Search II"]},
+{g:"Heap / Priority Queue",items:["Kth Largest Element in a Stream","Last Stone Weight","K Closest Points to Origin","Kth Largest Element in an Array","Task Scheduler","Design Twitter","Find Median from Data Stream"]},
+{g:"Backtracking",items:["Subsets","Combination Sum","Permutations","Subsets II","Combination Sum II","Word Search","Palindrome Partitioning","Letter Combinations of a Phone Number","N-Queens"]},
+{g:"Graphs",items:["Number of Islands","Clone Graph","Max Area of Island","Pacific Atlantic Water Flow","Surrounded Regions","Rotting Oranges","Walls and Gates","Course Schedule","Course Schedule II","Redundant Connection","Number of Connected Components in Undirected Graph","Graph Valid Tree","Word Ladder"]},
+{g:"Advanced Graphs",items:["Reconstruct Itinerary","Min Cost to Connect All Points","Network Delay Time","Swim in Rising Water","Alien Dictionary","Cheapest Flights Within K Stops"]},
+{g:"1D Dynamic Programming",items:["Climbing Stairs","Min Cost Climbing Stairs","House Robber","House Robber II","Longest Palindromic Substring","Palindromic Substrings","Decode Ways","Coin Change","Maximum Product Subarray","Word Break","Longest Increasing Subsequence","Partition Equal Subset Sum"]},
+{g:"2D Dynamic Programming",items:["Unique Paths","Longest Common Subsequence","Best Time to Buy/Sell Stock with Cooldown","Coin Change II","Target Sum","Interleaving String","Longest Increasing Path in a Matrix","Distinct Subsequences","Edit Distance","Burst Balloons","Regular Expression Matching"]},
+{g:"Greedy",items:["Maximum Subarray","Jump Game","Jump Game II","Gas Station","Hand of Straights","Merge Triplets to Form Target Triplet","Partition Labels","Valid Parenthesis String"]},
+{g:"Intervals",items:["Insert Interval","Merge Intervals","Non-Overlapping Intervals","Meeting Rooms","Meeting Rooms II","Minimum Interval to Include Each Query"]},
+{g:"Math & Geometry",items:["Rotate Image","Spiral Matrix","Set Matrix Zeroes","Happy Number","Plus One","Pow(x, n)","Multiply Strings","Detect Squares"]},
+{g:"Bit Manipulation",items:["Single Number","Number of 1 Bits","Counting Bits","Reverse Bits","Missing Number","Sum of Two Integers","Reverse Integer"]}
+]},
+{id:"fe",name:"Frontend",
+courses:[{title:"The Odin Project — React Path",url:"https://www.theodinproject.com/paths/full-stack-javascript/courses/react",desc:"theodinproject.com · Free · Project-based React — hooks, Router, Context, testing, portfolio projects",cert:false,pill:null}],
+groups:[
+{g:"React Introduction",items:["Why React — motivation and component mental model","Set up project with Vite — npm create vite@latest","Understand folder structure — src, public, main.jsx","Run dev server — npm run dev","Install React DevTools browser extension"]},
+{g:"Components & JSX",items:["Write first function component — return JSX","JSX rules — className, camelCase, single root element","Render component to DOM via main.jsx","Nest components — compose UI from parts","Extract components — when a piece gets too big","Fragment — avoid extra DOM wrapper divs","Project: build a simple card component library"]},
+{g:"Props",items:["Pass props — <Card title='hello' />","Destructure props in function signature","PropTypes — validate prop types at runtime","Default props with default parameter values","Pass a function as prop — onClick handler","children prop — wrap arbitrary JSX","Understand prop drilling — the problem it creates"]},
+{g:"State & Events",items:["useState — declare and read state","Update state — always use the setter, never mutate","State triggers re-render — mental model","onClick — attach handler to a button","onChange — controlled text input","Controlled form — state drives every input value","Lift state up — move to closest common ancestor","Multiple state variables — one per concern","Project: CV Builder"]},
+{g:"Rendering & Lists",items:["Conditional render with ternary — {flag ? A : B}","Conditional render with && — {flag && A}","Render list with .map() — return JSX per item","key prop — why React needs it, use stable IDs","Never use array index as key when list reorders","Fragment shorthand in lists"]},
+{g:"Effects & Data Fetching",items:["useEffect — run code after render","Dependency array — [], [dep], omitted — three behaviours","Cleanup — return function to cancel subscriptions","Fetch data on mount — useEffect + fetch + useState","Loading and error states — three-state pattern","Race condition — cancel stale fetch in cleanup","Write a custom hook — extract useEffect + state logic","Project: Memory Card Game"]},
+{g:"React Router",items:["Install react-router-dom v6","Wrap app in BrowserRouter","Define routes — Routes and Route path+element","Navigate with Link and NavLink","useNavigate — go to route programmatically","useParams — read :id from URL","Nested routes — Route inside Route + Outlet","Navigate component — redirect declaratively","Project: Shopping Cart (cart + product pages)"]},
+{g:"Context API",items:["createContext — make a context object","Provider value={} — wrap the component tree","useContext — read context anywhere in the tree","Update context — pass setter in value","When to use Context vs prop drilling","Multiple contexts — wrap with multiple Providers"]},
+{g:"useReducer",items:["useReducer(reducer, initialState) — signature","Reducer function — (state, action) => newState","dispatch({type, payload}) — send an action","Switch on action.type — handle each case","Combine useReducer + Context for global state","When useReducer beats useState — complex transitions"]},
+{g:"Performance & Patterns",items:["React.memo — skip re-render if props unchanged","useMemo — memoize expensive computed value","useCallback — stable function reference","Lazy load a route — React.lazy + Suspense","Error Boundary — class component catching render errors","Project: Where's Waldo"]},
+{g:"Testing",items:["Install Vitest + React Testing Library","render() a component in a test","getByRole, getByText — accessible queries","userEvent.click, userEvent.type — simulate input","Assert on DOM — expect(el).toBeInTheDocument()","Mock fetch — vi.fn() returning resolved promise","Test a custom hook — renderHook","Project: Battleship with full test coverage"]},
+{g:"Final Projects",items:["Project: Blog Frontend — full CRUD with API","Project: Messaging App Frontend","Deploy all projects to Netlify or Vercel","Polish portfolio — README, live links, screenshots"]}
+]},
+{id:"be",name:"Backend",
+courses:[
+{title:"The Odin Project — NodeJS Path",url:"https://www.theodinproject.com/paths/full-stack-javascript/courses/nodejs",desc:"theodinproject.com · Free · Written, project-based: Express → MongoDB → Auth → REST API → SQL",cert:false,pill:"node"},
+{title:"Spring Quickstart + spring.io/guides + Baeldung",url:"https://spring.io/quickstart",desc:"spring.io · Free · Official written guides — each guide is a mini runnable project, code-first throughout",cert:false,pill:"spring"},
+{title:"Django Official Tutorial — docs.djangoproject.com",url:"https://docs.djangoproject.com/en/stable/intro/tutorial01/",desc:"djangoproject.com · Free · Official 8-part written tutorial — builds a real Poll app from first line of code",cert:false,pill:"django"},
+{title:"Flask Official Tutorial — flask.palletsprojects.com",url:"https://flask.palletsprojects.com/en/stable/tutorial/",desc:"flask.palletsprojects.com · Free · Official written tutorial — builds Flaskr blog app with auth, DB, testing, deploy",cert:false,pill:"flask"}
+],
+groups:[
+{g:"Node.js — Setup & Core",pill:"node",items:["Install Node.js and npm — verify with node -v","Create package.json — npm init -y","Write first script — node file.js","Understand event loop — why Node is non-blocking","Install Express — npm install express","Hello world server — app.get('/') app.listen(3000)","nodemon — auto-restart on file change"]},
+{g:"Node.js — Express Routing & Middleware",pill:"node",items:["Router — express.Router(), split into route files","Route params — req.params.id","Query strings — req.query.search","Request body — express.json() middleware","Custom middleware — (req, res, next) => {}","Static files — express.static('public')","Error handling middleware — (err, req, res, next)","Project: Basic Informational Site"]},
+{g:"Node.js — MongoDB & Mongoose",pill:"node",items:["Install Mongoose — npm install mongoose","Connect — mongoose.connect(MONGO_URI)","Define Schema and Model","Create — new Model(data).save()","Read — Model.find(), Model.findById(id)","Update — Model.findByIdAndUpdate(id, data)","Delete — Model.findByIdAndDelete(id)","Populate — reference another collection","Project: Mini Message Board"]},
+{g:"Node.js — Auth, REST API & SQL",pill:"node",items:["Sessions + PassportJS local strategy","Hash passwords with bcrypt","Protect routes — if (!req.user) redirect","JWT sign and verify middleware","Design REST routes — GET/POST/PUT/DELETE /api/*","helmet(), cors(), express-rate-limit","knex — connect PostgreSQL, migrations, queries","Project: Members Only Club","Project: Blog API with JWT","Project: File Uploader (PostgreSQL + Multer)"]},
+{g:"Spring Boot — Quickstart & First API",pill:"spring",items:["Read: spring.io/quickstart — generate project at start.spring.io","Add Spring Web dependency — pom.xml","Write @RestController with @GetMapping('/hello')","Run — mvn spring-boot:run, hit localhost:8080","Read guide: Building a RESTful Web Service — spring.io/guides","@PathVariable and @RequestParam","@RequestBody — receive JSON","Return ResponseEntity with status codes","Project: Hello World REST API running locally"]},
+{g:"Spring Boot — JPA & Database",pill:"spring",items:["Read guide: Accessing Data with JPA — spring.io/guides","Add Spring Data JPA + PostgreSQL dependencies","Configure datasource in application.properties","@Entity @Table @Id @GeneratedValue — map class to DB","Extend JpaRepository<Entity, Long>","repository.save(), findById(), findAll(), deleteById()","@OneToMany and @ManyToOne — entity relations","Custom query — @Query annotation","Read: Baeldung — Spring Data JPA Tutorial","Project: Student CRUD API with PostgreSQL"]},
+{g:"Spring Boot — Service Layer & Validation",pill:"spring",items:["@Service — extract business logic from controller","Constructor injection — avoid @Autowired on fields","@Transactional — wrap multi-step DB operations","@Valid on @RequestBody — trigger Bean Validation","@NotNull @NotBlank @Size — validation annotations","@ExceptionHandler — handle specific exception","@ControllerAdvice — global error handler","Return structured error JSON body","Read: Baeldung — Spring Boot Exception Handling"]},
+{g:"Spring Boot — Security & JWT",pill:"spring",items:["Read guide: Securing a Web Application — spring.io/guides","Add Spring Security dependency","SecurityFilterChain bean — configure http rules","BCryptPasswordEncoder — hash and check passwords","UserDetailsService — load user from DB","Extend OncePerRequestFilter for JWT","Generate JWT — Jwts.builder().signWith(key).compact()","Parse and validate JWT — set SecurityContext","@PreAuthorize — method-level security","Project: Secure Blog API with JWT auth"]},
+{g:"Spring Boot — Testing & Docker",pill:"spring",items:["@SpringBootTest — full integration test context","@WebMvcTest — test controller layer only","MockMvc — perform(get('/api')).andExpect(status().isOk())","@MockBean — replace a service with a mock","JUnit 5 — @Test @BeforeEach @AfterEach","Write Dockerfile — FROM eclipse-temurin:17-jre","docker build -t app . && docker run -p 8080:8080","docker-compose.yml — app + postgres together","Read: Baeldung — Testing in Spring Boot","Project: Dockerised Spring Boot REST API"]},
+{g:"Django — Part 1: Requests and Responses",pill:"django",items:["Install Python 3 + pip, create venv — python -m venv env","pip install django — inside activated venv","django-admin startproject mysite — create project","python manage.py runserver — verify Django works","Create polls app — python manage.py startapp polls","Write first view — def index(request): return HttpResponse()","Wire view to URL — path('', views.index) in urls.py","Include app URLs in project urls.py with include()"]},
+{g:"Django — Part 2: Models and Admin",pill:"django",items:["Define Question and Choice models in models.py","Add app to INSTALLED_APPS in settings.py","python manage.py makemigrations — detect model changes","python manage.py migrate — apply migrations to DB","Django shell — python manage.py shell — test ORM","ORM create — Question.objects.create(question_text='...')","ORM filter — Question.objects.filter(pub_date__year=2024)","ORM relations — q.choice_set.create(choice_text='Yes')","python manage.py createsuperuser","Register models in admin.py — admin.site.register(Question)"]},
+{g:"Django — Part 3 & 4: Views, Templates, Forms",pill:"django",items:["Add detail, results, vote views to views.py","Use render() shortcut — pass context dict to template","get_object_or_404() — return 404 on missing object","Create templates/ directory — polls/index.html","Template language — {{ variable }}, {% for %}, {% url %}","URL namespacing — app_name + {% url 'polls:detail' %}","Generic views — ListView and DetailView","Django forms — write vote form handling with POST","CSRF token — {% csrf_token %} in every form","Always HttpResponseRedirect after POST success"]},
+{g:"Django — Part 5-8: Testing, Static, Admin, Packages",pill:"django",items:["Write tests in tests.py — class QuestionModelTests(TestCase)","Test a view with Django test Client — self.client.get(url)","python manage.py test — run all tests","Add STATICFILES_DIRS — configure static files","{% load static %} and {% static 'polls/style.css' %}","Customise admin list display — list_display, list_filter","Admin fieldsets — group fields in change form","pip install django-debug-toolbar — third-party package","Configure debug toolbar in INSTALLED_APPS and urls.py","Project: Complete Polls App — models, views, tests, admin"]},
+{g:"Django — REST Framework & Deploy",pill:"django",items:["pip install djangorestframework — add to INSTALLED_APPS","Serializer — class QuestionSerializer(serializers.ModelSerializer)","APIView — get() and post() with Response()","ViewSet + Router — auto-generate all CRUD endpoints","Permission classes — IsAuthenticated, IsAdminUser","JWT — pip install djangorestframework-simplejwt","CORS — pip install django-cors-headers","Prepare for deploy — DEBUG=False, ALLOWED_HOSTS, collectstatic","Deploy to Railway or Render with gunicorn","Project: Django REST API with JWT auth"]},
+{g:"Flask — Project Layout & App Factory",pill:"flask",items:["Read: flask.palletsprojects.com/tutorial — overview","python -m venv .venv && pip install flask","Create flaskr/ package directory with __init__.py","Application factory — def create_app(): app = Flask(__name__)","app.config.from_mapping(SECRET_KEY, DATABASE)","Register /hello route — verify factory works with flask run","Understand why factory pattern beats global app instance","Project: Flaskr blog app — start"]},
+{g:"Flask — Database with SQLite",pill:"flask",items:["Create db.py — get_db() using g and teardown_appcontext","schema.sql — CREATE TABLE user, CREATE TABLE post","init-db CLI command — flask --app flaskr init-db","sqlite3.connect() — open connection inside request context","Execute SQL — db.execute('INSERT INTO user...')","db.commit() — persist changes","Close db on teardown — close_db registered with app","Verify DB created in instance/ folder"]},
+{g:"Flask — Authentication Blueprint",pill:"flask",items:["Create auth.py Blueprint — bp = Blueprint('auth', __name__)","Register blueprint — app.register_blueprint(auth.bp)","Register view — GET shows form, POST validates + inserts","check_password_hash vs generate_password_hash","login view — query user, check hash, store in session","session['user_id'] — persist login across requests","load_logged_in_user with @bp.before_app_request","logout view — session.clear()","@login_required decorator — redirect to login if not authed"]},
+{g:"Flask — Blog Blueprint & Views",pill:"flask",items:["Create blog.py Blueprint — index, create, update, delete","Index view — JOIN user + post, ORDER BY created DESC","Render template — render_template('blog/index.html')","Create view — validate title, INSERT INTO post","get_post(id) helper — fetch post, check author ownership","Update view — populate form from DB, UPDATE on POST","Delete view — DELETE FROM post, redirect to index","Register blog blueprint as url_prefix='/'","Project: Flaskr blog — all CRUD views working"]},
+{g:"Flask — Testing & Deploy",pill:"flask",items:["Create tests/ with conftest.py — app fixture with test config","data.sql — insert test user and post","test_factory.py — assert app is configured correctly","test_db.py — test init-db command","test_auth.py — test register, login, logout responses","test_blog.py — test create, update, delete with auth","pytest — run all tests, check coverage","pip install -e . — install project as package","Deploy to Render — requirements.txt, gunicorn wsgi:app","Project: Flaskr fully tested and deployed"]}
+]},
+{id:"ai",name:"AI / ML",
+courses:[
+{title:"fast.ai — Practical Deep Learning for Coders",url:"https://course.fast.ai",desc:"course.fast.ai · Free · Deep learning, NLP, CV, tabular, deployment — top-down hands-on PyTorch",cert:false,pill:null},
+{title:"Kaggle Learn — ML & Data Science Micro-Courses",url:"https://www.kaggle.com/learn",desc:"kaggle.com/learn · Free certificate per course · Classical ML, Pandas, NLP, feature engineering gaps",cert:true,pill:null}
+],
+groups:[
+{g:"Kaggle — Python for Data Science",items:["Hello Python — syntax and variables","Functions and getting help","Booleans and conditionals","Lists and slicing","Loops and list comprehensions","Strings and dictionaries","Working with external libraries","Kaggle Python certificate"]},
+{g:"Kaggle — Pandas",items:["Creating, reading and writing DataFrames","Indexing, selecting and assigning","Summary functions and maps","Grouping and sorting","Data types and missing values","Renaming and combining DataFrames","Kaggle Pandas certificate"]},
+{g:"Kaggle — Intro to Machine Learning",items:["How models work — decision tree intuition","Basic data exploration with Pandas","First model with sklearn — fit and predict","Model validation — train/test split","Underfitting and overfitting","Random forests","Kaggle Intro ML certificate"]},
+{g:"Kaggle — Intermediate Machine Learning",items:["Handle missing values — imputation","Categorical variables — ordinal and one-hot encoding","Pipelines — clean reusable ML code","Cross-validation — reliable evaluation","XGBoost — gradient boosting","Data leakage — detect and prevent","Kaggle Intermediate ML certificate"]},
+{g:"Kaggle — Data Visualization",items:["Line charts with seaborn","Bar charts and heatmaps","Scatter plots","Distributions — KDE and histograms","Choosing the right chart type","Kaggle Data Visualization certificate"]},
+{g:"Kaggle — Feature Engineering",items:["Mutual information — rank features","Creating features — math transforms","Clustering with k-means for features","PCA — dimensionality reduction","Target encoding","Kaggle Feature Engineering certificate"]},
+{g:"Kaggle — Intro to Deep Learning",items:["Single neuron — linear unit","Deep neural networks — stacking layers","Stochastic gradient descent","Overfitting and underfitting in DL","Dropout and batch normalization","Binary classification project","Kaggle Deep Learning certificate"]},
+{g:"Kaggle — NLP",items:["Text classification with naive Bayes","Word vectors — embeddings","GloVe embeddings","Train a text classifier","Cross-entropy loss for text","Kaggle NLP certificate"]},
+{g:"fast.ai — Lesson 1: Getting started",items:["Set up Kaggle notebook","Run first image classifier — fine_tune()","Understand fine-tuning — what changes, what freezes","Interpret results — confusion matrix","Export model and deploy to HuggingFace Spaces"]},
+{g:"fast.ai — Lesson 2: Deployment",items:["Build Gradio app for your model","Collect your own image dataset","Train on custom images","Debug bad predictions","Deploy model to live URL"]},
+{g:"fast.ai — Lesson 3: Neural Net Foundations",items:["Images as pixel arrays — matrix intuition","Matrix multiplication from scratch","Write two-layer neural net by hand","ReLU activation — why non-linearity matters","Forward pass step by step","MSE loss and gradient descent by hand","Backpropagation — chain rule intuition"]},
+{g:"fast.ai — Lesson 4: NLP",items:["Tokenization and vocabulary building","Language model intuition","Fine-tune a text classifier on IMDb","HuggingFace tokenizer with fast.ai","Evaluate and export NLP model"]},
+{g:"fast.ai — Lesson 5: Tabular & Embeddings",items:["Tabular data pipeline in Pandas","Embeddings for categorical features","Build tabular model from scratch","Batch norm, dropout, learning rate finder"]},
+{g:"fast.ai — Lesson 6: Random Forests & Recommenders",items:["Decision tree and random forest from scratch","Feature importance and OOB error","Collaborative filtering — latent factors","Build a movie recommender"]},
+{g:"fast.ai — Lesson 7: Backprop Deep Dive",items:["Compute all gradients manually","Build mini PyTorch from scratch","SGD, Momentum, Adam optimizers","Weight initialisation strategies"]},
+{g:"fast.ai — Lesson 8: CNNs",items:["Convolution operation and feature maps","MaxPooling and stride","ResNet skip connections — why they work","Transfer learning mechanics","Train CNN on CIFAR-10 from scratch"]},
+{g:"fast.ai — MLOps & Production",items:["Track experiments with Weights & Biases","Serve model API with FastAPI","Dockerfile for ML app","Deploy to HuggingFace Spaces or Render","Monitor predictions and handle latency","CI/CD for ML with GitHub Actions"]}
+]},
+{id:"sd",name:"System Design",
+courses:[{title:"System Design Primer — donnemartin/system-design-primer",url:"https://github.com/donnemartin/system-design-primer",desc:"GitHub · 270k stars · Free · Every HLD + LLD concept, classic designs, all patterns",cert:false,pill:null}],
+groups:[
+{g:"HLD — Scalability",items:["Vertical vs horizontal scaling","Load balancers — round-robin, least connections, IP hash","CDN — push vs pull","Caching layers — client, CDN, app, DB","Cache invalidation — write-through, write-behind, write-around","Cache eviction — LRU, LFU, FIFO","Reverse proxy vs load balancer","Microservices vs monolith","Service discovery","API gateway pattern"]},
+{g:"HLD — Databases",items:["ACID properties","SQL vs NoSQL","Master-slave replication","Master-master replication","Federation — functional partitioning","Sharding strategies","Denormalization","SQL tuning — indexes and EXPLAIN","NoSQL types — key-value, document, column, graph","SQL vs NoSQL decision framework"]},
+{g:"HLD — Communication",items:["HTTP and HTTPS lifecycle","TCP vs UDP","REST design principles","RPC and gRPC basics","GraphQL — when over REST","WebSockets — full duplex","Long polling and SSE","Kafka vs RabbitMQ","Pub/Sub pattern","Idempotency and at-least-once delivery"]},
+{g:"HLD — Classic System Designs",items:["Design URL shortener (TinyURL)","Design Twitter — timeline and search","Design WhatsApp — messaging","Design Instagram — photo sharing","Design YouTube — video streaming","Design Uber — ride sharing","Design Google Drive — file storage","Design a web crawler","Design a notification system","Design a rate limiter","Design search autocomplete","Design distributed cache (Redis)","Design news feed ranking","Design ad click aggregator"]},
+{g:"LLD — SOLID Principles",items:["Single Responsibility","Open/Closed","Liskov Substitution","Interface Segregation","Dependency Inversion","Composition over inheritance","Encapsulation","Polymorphism"]},
+{g:"LLD — Creational Patterns",items:["Singleton","Factory Method","Abstract Factory","Builder","Prototype"]},
+{g:"LLD — Structural Patterns",items:["Adapter","Bridge","Composite","Decorator","Facade","Flyweight","Proxy"]},
+{g:"LLD — Behavioral Patterns",items:["Observer","Strategy","Command","Iterator","Template Method","State","Chain of Responsibility","Mediator"]},
+{g:"LLD — Classic Problems",items:["Design Parking Lot","Design Library Management System","Design Elevator System","Design Chess Game","Design ATM Machine","Design Hotel Booking System","Design Movie Ticket Booking","Design LRU Cache (HashMap + DLL)","Design Rate Limiter (token bucket)","Design Pub/Sub System"]}
+]}
+];
+
+const PILL_MAP={node:{cls:'pill-node',label:'Node.js'},spring:{cls:'pill-spring',label:'Spring Boot'},django:{cls:'pill-django',label:'Django'},flask:{cls:'pill-flask',label:'Flask'}};
+const TOTAL=TRACKS.reduce((a,t)=>a+t.groups.reduce((b,g)=>b+g.items.length,0),0);
+let state={},dailyLog={};
+try{state=JSON.parse(localStorage.getItem('cer6_s')||'{}')}catch(e){}
+try{dailyLog=JSON.parse(localStorage.getItem('cer6_d')||'{}')}catch(e){}
+function todayKey(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate()}
+function save(){try{localStorage.setItem('cer6_s',JSON.stringify(state));localStorage.setItem('cer6_d',JSON.stringify(dailyLog))}catch(e){}}
+function ikey(tid,gi,ii){return tid+'|'+gi+'|'+ii}
+function trackProgress(tid){let tot=0,done=0;TRACKS.find(t=>t.id===tid).groups.forEach((g,gi)=>g.items.forEach((_,ii)=>{tot++;if(state[ikey(tid,gi,ii)])done++}));return{tot,done}}
+function totalDone(){let d=0;TRACKS.forEach(t=>t.groups.forEach((g,gi)=>g.items.forEach((_,ii)=>{if(state[ikey(t.id,gi,ii)])d++})));return d}
+function calcStreak(){let s=0,d=new Date();for(;;){const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();if((dailyLog[k]||0)>0){s++;d.setDate(d.getDate()-1)}else break}return s}
+function toggle(tid,gi,ii){
+  const k=ikey(tid,gi,ii),was=!!state[k];
+  state[k]=!was;
+  const dk=todayKey();
+  dailyLog[dk]=Math.max(0,(dailyLog[dk]||0)+(was?-1:1));
+  save();document.getElementById('i_'+k)&&document.getElementById('i_'+k).classList.toggle('done',state[k]);updateAll();
+}
+let dc=null,tc=null;
+function updateAll(){
+  const done=totalDone(),pct=TOTAL>0?Math.round(done/TOTAL*100):0;
+  document.getElementById('globalFill').style.width=pct+'%';
+  document.getElementById('globalTxt').textContent=done+' / '+TOTAL+' done';
+  document.getElementById('globalPct').textContent=pct+'%';
+  const sr=document.getElementById('statsRow');sr.innerHTML='';
+  TRACKS.forEach((t,i)=>{
+    const{tot,done:d}=trackProgress(t.id),p=tot>0?Math.round(d/tot*100):0;
+    sr.innerHTML+=`<div class="sc"><div class="sc-num">${p}%</div><div class="sc-lbl">${t.name}</div></div>`;
+    const tabCnt=document.querySelectorAll('.tab')[i]&&document.querySelectorAll('.tab')[i].querySelector('.cnt');
+    if(tabCnt)tabCnt.textContent=d;
+    const sf=document.getElementById('sbf_'+t.id),sp=document.getElementById('sbp_'+t.id);
+    if(sf)sf.style.width=p+'%';if(sp)sp.textContent=p+'%';
+  });
+  document.getElementById('streakRow').innerHTML=
+    `<div class="streak-box">&#128293; ${calcStreak()} day streak</div>`+
+    `<div class="streak-box">&#128197; ${dailyLog[todayKey()]||0} done today</div>`+
+    `<div class="streak-box">&#10003; ${totalDone()} total done</div>`;
+  updateCharts();
+}
+function updateCharts(){
+  const days=[],counts=[],cum=[];let c=0;
+  for(let i=13;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);const k=d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(),v=dailyLog[k]||0;days.push((d.getMonth()+1)+'/'+(d.getDate()));counts.push(v);c+=v;cum.push(c);}
+  if(dc){dc.data.labels=days;dc.data.datasets[0].data=counts;dc.data.datasets[1].data=cum;dc.update()}
+  else{dc=new Chart(document.getElementById('dailyChart'),{type:'bar',data:{labels:days,datasets:[{label:'Completed',data:counts,backgroundColor:'#1D9E75',order:2},{label:'Cumulative',data:cum,type:'line',borderColor:'#378ADD',backgroundColor:'transparent',pointRadius:3,order:1}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:11}}},y:{beginAtZero:true,ticks:{stepSize:1,font:{size:11}}}}}})}
+  const cols=['#1D9E75','#7F77DD','#D85A30','#EF9F27','#378ADD'];
+  const tData=TRACKS.map(t=>{const{tot,done}=trackProgress(t.id);return tot>0?Math.round(done/tot*100):0});
+  document.getElementById('trackLegend').innerHTML=TRACKS.map((t,i)=>`<span><span class="leg-dot" style="background:${cols[i]}"></span>${t.name} ${tData[i]}%</span>`).join('');
+  if(tc){tc.data.datasets[0].data=tData;tc.update()}
+  else{tc=new Chart(document.getElementById('trackChart'),{type:'bar',data:{labels:TRACKS.map(t=>t.name),datasets:[{label:'%',data:tData,backgroundColor:cols,borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:11}}},y:{ticks:{font:{size:12}}}}}})}
+}
+function buildUI(){
+  const te=document.getElementById('tabsEl'),se=document.getElementById('sectionsEl');
+  te.innerHTML='';se.innerHTML='';
+  TRACKS.forEach((t,ti)=>{
+    const tab=document.createElement('div');
+    tab.className='tab'+(ti===0?' on':'');
+    tab.innerHTML=t.name+`<span class="cnt">0</span>`;
+    tab.onclick=(()=>{const idx=ti;return()=>{document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',i===idx));document.querySelectorAll('.sec').forEach((el,i)=>el.classList.toggle('on',i===idx));}})();
+    te.appendChild(tab);
+    const sec=document.createElement('div');sec.className='sec'+(ti===0?' on':'');
+    let html='';
+    t.courses.forEach((c,ci)=>{
+      if(ci>0)html+=`<div class="divider"></div>`;
+      const pm=c.pill&&PILL_MAP[c.pill]?`<span class="stack-pill ${PILL_MAP[c.pill].cls}">${PILL_MAP[c.pill].label}</span>`:'';
+      html+=`<div class="course-banner"><div class="cb-title">${c.title}${pm}${c.cert?'<span class="cert-pill">Free certificate</span>':''}</div><div class="cb-sub">${c.desc}</div><a class="cb-link" href="${c.url}" target="_blank">&#8599; Open course</a></div>`;
+    });
+    html+=`<div class="sec-bar-row"><div class="sec-bar-track"><div class="sec-bar-fill" id="sbf_${t.id}" style="width:0%"></div></div><span class="sec-pct" id="sbp_${t.id}">0%</span></div>`;
+    t.groups.forEach((g,gi)=>{
+      const pm=g.pill&&PILL_MAP[g.pill]?`<span class="stack-pill ${PILL_MAP[g.pill].cls}" style="font-size:10px;padding:1px 6px">${PILL_MAP[g.pill].label}</span>`:'';
+      html+=`<div class="group-hd">${g.g}${pm}</div><div class="items">`;
+      g.items.forEach((item,ii)=>{
+        const k=ikey(t.id,gi,ii),done=state[k]?'done':'';
+        html+=`<div class="item ${done}" id="i_${k}" onclick="toggle('${t.id}',${gi},${ii})"><div class="cb2"><span class="ck">&#10003;</span></div><span class="item-txt">${item}</span><span class="item-num">${gi+1}.${ii+1}</span></div>`;
+      });
+      html+='</div>';
+    });
+    sec.innerHTML=html;se.appendChild(sec);
+  });
+}
+function exportData(){
+  const lines=['COMPLETE ENGINEER ROADMAP — PROGRESS EXPORT','Exported: '+new Date().toLocaleDateString(),'Total: '+totalDone()+' / '+TOTAL+' ('+Math.round(totalDone()/TOTAL*100)+'%)',''];
+  TRACKS.forEach(t=>{const{tot,done}=trackProgress(t.id);lines.push('=== '+t.name.toUpperCase()+' — '+done+'/'+tot+' ===');t.groups.forEach((g,gi)=>{lines.push('  '+g.g);g.items.forEach((item,ii)=>{lines.push('  '+(state[ikey(t.id,gi,ii)]?'[x]':'[ ]')+' '+item);});});lines.push('');});
+  lines.push('--- DAILY LOG ---');Object.keys(dailyLog).sort().forEach(d=>lines.push(d+': '+dailyLog[d]+' tasks'));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines.join('\n')],{type:'text/plain'}));a.download='engineer_roadmap_progress.txt';a.click();
+}
+buildUI();updateAll();
+</script>
+</body>
+</html>
