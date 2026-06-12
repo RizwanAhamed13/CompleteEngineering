@@ -76,6 +76,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .item.done .ck{display:block}
 .item-txt{font-size:13px;color:var(--text-primary);line-height:1.4;flex:1}
 .item-num{font-size:11px;color:var(--text-tertiary);flex-shrink:0;align-self:center;white-space:nowrap}
+.item-link{font-size:13px;font-weight:600;color:var(--green);text-decoration:none;padding:1px 5px;flex-shrink:0;align-self:center;border-radius:5px;line-height:1}
+.item-link:hover{background:var(--green-light)}
 .divider{height:1px;background:var(--border-light);margin:12px 0}
 .analytics-wrap{margin-top:2rem;background:var(--bg-primary);border-radius:var(--radius-lg);padding:1.25rem;border:1px solid var(--border-light)}
 .chart-title{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:4px}
@@ -219,6 +221,282 @@ groups:[
 ];
 
 const PILL_MAP={node:{cls:'pill-node',label:'Node.js'},spring:{cls:'pill-spring',label:'Spring Boot'},django:{cls:'pill-django',label:'Django'},flask:{cls:'pill-flask',label:'Flask'}};
+
+/* ===== Per-topic resource links (all free) ===== */
+const LC_EXC={
+"Lowest Common Ancestor of BST":"lowest-common-ancestor-of-a-binary-search-tree",
+"Kth Smallest Element in BST":"kth-smallest-element-in-a-bst",
+"Construct Binary Tree from Preorder and Inorder":"construct-binary-tree-from-preorder-and-inorder-traversal",
+"Best Time to Buy/Sell Stock with Cooldown":"best-time-to-buy-and-sell-stock-with-cooldown",
+"Pow(x, n)":"powx-n"
+};
+const NC_PREMIUM={
+"Encode and Decode Strings":"string-encode-and-decode",
+"Walls and Gates":"islands-and-treasure",
+"Number of Connected Components in Undirected Graph":"count-connected-components",
+"Graph Valid Tree":"valid-tree",
+"Alien Dictionary":"foreign-dictionary",
+"Meeting Rooms":"meeting-schedule",
+"Meeting Rooms II":"meeting-schedule-ii"
+};
+function lcSlug(name){return name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'')}
+const RD="https://react.dev",RR="https://reactrouter.com/en/main",EX="https://expressjs.com/en",MG="https://mongoosejs.com/docs",BD="https://www.baeldung.com",SG="https://spring.io/guides/gs",DJ="https://docs.djangoproject.com/en/stable",DRF="https://www.django-rest-framework.org",FL="https://flask.palletsprojects.com/en/stable",KG="https://www.kaggle.com/learn",FA="https://course.fast.ai/Lessons",SDP="https://github.com/donnemartin/system-design-primer",KPS="https://github.com/karanpratapsingh/system-design",RG="https://refactoring.guru/design-patterns",ALD="https://github.com/ashishps1/awesome-low-level-design/blob/main/problems",HI="https://www.hellointerview.com/learn/system-design/problem-breakdowns";
+const GROUP_LINKS={
+"React Introduction":RD+"/learn",
+"Components & JSX":RD+"/learn/your-first-component",
+"Props":RD+"/learn/passing-props-to-a-component",
+"State & Events":RD+"/learn/state-a-components-memory",
+"Rendering & Lists":RD+"/learn/rendering-lists",
+"Effects & Data Fetching":RD+"/learn/synchronizing-with-effects",
+"React Router":RR+"/start/tutorial",
+"Context API":RD+"/learn/passing-data-deeply-with-context",
+"useReducer":RD+"/learn/extracting-state-logic-into-a-reducer",
+"Performance & Patterns":RD+"/reference/react/memo",
+"Testing":"https://testing-library.com/docs/react-testing-library/intro/",
+"Final Projects":"https://www.theodinproject.com/paths/full-stack-javascript/courses/react",
+"Node.js — Setup & Core":"https://nodejs.org/en/learn/getting-started/introduction-to-nodejs",
+"Node.js — Express Routing & Middleware":EX+"/guide/routing.html",
+"Node.js — MongoDB & Mongoose":MG+"/index.html",
+"Node.js — Auth, REST API & SQL":"https://www.theodinproject.com/paths/full-stack-javascript/courses/nodejs",
+"Spring Boot — Quickstart & First API":SG+"/rest-service",
+"Spring Boot — JPA & Database":SG+"/accessing-data-jpa",
+"Spring Boot — Service Layer & Validation":BD+"/spring-boot-bean-validation",
+"Spring Boot — Security & JWT":SG+"/securing-web",
+"Spring Boot — Testing & Docker":SG+"/testing-web",
+"Django — Part 1: Requests and Responses":DJ+"/intro/tutorial01/",
+"Django — Part 2: Models and Admin":DJ+"/intro/tutorial02/",
+"Django — Part 3 & 4: Views, Templates, Forms":DJ+"/intro/tutorial03/",
+"Django — Part 5-8: Testing, Static, Admin, Packages":DJ+"/intro/tutorial05/",
+"Django — REST Framework & Deploy":DRF+"/tutorial/quickstart/",
+"Flask — Project Layout & App Factory":FL+"/tutorial/factory/",
+"Flask — Database with SQLite":FL+"/tutorial/database/",
+"Flask — Authentication Blueprint":FL+"/tutorial/views/",
+"Flask — Blog Blueprint & Views":FL+"/tutorial/blog/",
+"Flask — Testing & Deploy":FL+"/tutorial/tests/",
+"Kaggle — Python for Data Science":KG+"/python",
+"Kaggle — Pandas":KG+"/pandas",
+"Kaggle — Intro to Machine Learning":KG+"/intro-to-machine-learning",
+"Kaggle — Intermediate Machine Learning":KG+"/intermediate-machine-learning",
+"Kaggle — Data Visualization":KG+"/data-visualization",
+"Kaggle — Feature Engineering":KG+"/feature-engineering",
+"Kaggle — Intro to Deep Learning":KG+"/intro-to-deep-learning",
+"Kaggle — NLP":KG+"/natural-language-processing",
+"fast.ai — Lesson 1: Getting started":FA+"/lesson1.html",
+"fast.ai — Lesson 2: Deployment":FA+"/lesson2.html",
+"fast.ai — Lesson 3: Neural Net Foundations":FA+"/lesson3.html",
+"fast.ai — Lesson 4: NLP":FA+"/lesson4.html",
+"fast.ai — Lesson 5: Tabular & Embeddings":FA+"/lesson5.html",
+"fast.ai — Lesson 6: Random Forests & Recommenders":FA+"/lesson6.html",
+"fast.ai — Lesson 7: Backprop Deep Dive":FA+"/lesson7.html",
+"fast.ai — Lesson 8: CNNs":FA+"/lesson8.html",
+"fast.ai — MLOps & Production":"https://madewithml.com/",
+"HLD — Scalability":SDP+"#index-of-system-design-topics",
+"HLD — Databases":SDP+"#database",
+"HLD — Communication":SDP+"#communication",
+"HLD — Classic System Designs":SDP+"#system-design-interview-questions-with-solutions",
+"LLD — SOLID Principles":"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design",
+"LLD — Creational Patterns":RG+"/creational-patterns",
+"LLD — Structural Patterns":RG+"/structural-patterns",
+"LLD — Behavioral Patterns":RG+"/behavioral-patterns",
+"LLD — Classic Problems":"https://github.com/ashishps1/awesome-low-level-design"
+};
+const ITEM_LINKS={
+/* React specifics */
+"Why React — motivation and component mental model":RD+"/learn/thinking-in-react",
+"Set up project with Vite — npm create vite@latest":"https://vitejs.dev/guide/",
+"Install React DevTools browser extension":RD+"/learn/react-developer-tools",
+"JSX rules — className, camelCase, single root element":RD+"/learn/writing-markup-with-jsx",
+"Fragment — avoid extra DOM wrapper divs":RD+"/reference/react/Fragment",
+"Fragment shorthand in lists":RD+"/reference/react/Fragment",
+"children prop — wrap arbitrary JSX":RD+"/learn/passing-props-to-a-component#passing-jsx-as-children",
+"Understand prop drilling — the problem it creates":RD+"/learn/passing-data-deeply-with-context",
+"useState — declare and read state":RD+"/reference/react/useState",
+"Update state — always use the setter, never mutate":RD+"/learn/state-as-a-snapshot",
+"State triggers re-render — mental model":RD+"/learn/render-and-commit",
+"onClick — attach handler to a button":RD+"/learn/responding-to-events",
+"onChange — controlled text input":RD+"/learn/reacting-to-input-with-state",
+"Controlled form — state drives every input value":RD+"/reference/react-dom/components/input#controlling-an-input-with-a-state-variable",
+"Lift state up — move to closest common ancestor":RD+"/learn/sharing-state-between-components",
+"Conditional render with ternary — {flag ? A : B}":RD+"/learn/conditional-rendering",
+"Conditional render with && — {flag && A}":RD+"/learn/conditional-rendering",
+"Render list with .map() — return JSX per item":RD+"/learn/rendering-lists",
+"key prop — why React needs it, use stable IDs":RD+"/learn/rendering-lists#keeping-list-items-in-order-with-key",
+"Never use array index as key when list reorders":RD+"/learn/rendering-lists#keeping-list-items-in-order-with-key",
+"useEffect — run code after render":RD+"/reference/react/useEffect",
+"Cleanup — return function to cancel subscriptions":RD+"/learn/synchronizing-with-effects#step-3-add-cleanup-if-needed",
+"Fetch data on mount — useEffect + fetch + useState":RD+"/reference/react/useEffect#fetching-data-with-effects",
+"Race condition — cancel stale fetch in cleanup":RD+"/reference/react/useEffect#fetching-data-with-effects",
+"Write a custom hook — extract useEffect + state logic":RD+"/learn/reusing-logic-with-custom-hooks",
+"useNavigate — go to route programmatically":RR+"/hooks/use-navigate",
+"useParams — read :id from URL":RR+"/hooks/use-params",
+"createContext — make a context object":RD+"/reference/react/createContext",
+"useContext — read context anywhere in the tree":RD+"/reference/react/useContext",
+"useReducer(reducer, initialState) — signature":RD+"/reference/react/useReducer",
+"React.memo — skip re-render if props unchanged":RD+"/reference/react/memo",
+"useMemo — memoize expensive computed value":RD+"/reference/react/useMemo",
+"useCallback — stable function reference":RD+"/reference/react/useCallback",
+"Lazy load a route — React.lazy + Suspense":RD+"/reference/react/lazy",
+"Error Boundary — class component catching render errors":RD+"/reference/react/Component#catching-rendering-errors-with-an-error-boundary",
+"Install Vitest + React Testing Library":"https://vitest.dev/guide/",
+"userEvent.click, userEvent.type — simulate input":"https://testing-library.com/docs/user-event/intro/",
+"Mock fetch — vi.fn() returning resolved promise":"https://vitest.dev/api/vi.html",
+"Test a custom hook — renderHook":"https://testing-library.com/docs/react-testing-library/api/#renderhook",
+"Deploy all projects to Netlify or Vercel":"https://vitejs.dev/guide/static-deploy",
+/* Node specifics */
+"Understand event loop — why Node is non-blocking":"https://nodejs.org/en/learn/asynchronous-work/event-loop-timers-and-nexttick",
+"Install Express — npm install express":EX+"/starter/installing.html",
+"Hello world server — app.get('/') app.listen(3000)":EX+"/starter/hello-world.html",
+"nodemon — auto-restart on file change":"https://www.npmjs.com/package/nodemon",
+"Route params — req.params.id":EX+"/guide/routing.html#route-parameters",
+"Request body — express.json() middleware":EX+"/api.html#express.json",
+"Custom middleware — (req, res, next) => {}":EX+"/guide/writing-middleware.html",
+"Static files — express.static('public')":EX+"/starter/static-files.html",
+"Error handling middleware — (err, req, res, next)":EX+"/guide/error-handling.html",
+"Define Schema and Model":MG+"/guide.html",
+"Read — Model.find(), Model.findById(id)":MG+"/queries.html",
+"Populate — reference another collection":MG+"/populate.html",
+"Sessions + PassportJS local strategy":"https://www.passportjs.org/concepts/authentication/strategies/",
+"Hash passwords with bcrypt":"https://www.npmjs.com/package/bcrypt",
+"JWT sign and verify middleware":"https://jwt.io/introduction",
+"Design REST routes — GET/POST/PUT/DELETE /api/*":"https://restfulapi.net/",
+"helmet(), cors(), express-rate-limit":"https://helmetjs.github.io/",
+"knex — connect PostgreSQL, migrations, queries":"https://knexjs.org/guide/",
+/* Spring specifics */
+"Read: spring.io/quickstart — generate project at start.spring.io":"https://spring.io/quickstart",
+"Read guide: Building a RESTful Web Service — spring.io/guides":SG+"/rest-service",
+"Read guide: Accessing Data with JPA — spring.io/guides":SG+"/accessing-data-jpa",
+"Read: Baeldung — Spring Data JPA Tutorial":BD+"/the-persistence-layer-with-spring-data-jpa",
+"Constructor injection — avoid @Autowired on fields":BD+"/constructor-injection-in-spring",
+"@Transactional — wrap multi-step DB operations":BD+"/transaction-configuration-with-jpa-and-spring",
+"@ExceptionHandler — handle specific exception":BD+"/exception-handling-for-rest-with-spring",
+"@ControllerAdvice — global error handler":BD+"/exception-handling-for-rest-with-spring",
+"Read: Baeldung — Spring Boot Exception Handling":BD+"/exception-handling-for-rest-with-spring",
+"Read guide: Securing a Web Application — spring.io/guides":SG+"/securing-web",
+"Extend OncePerRequestFilter for JWT":BD+"/spring-onceperrequestfilter",
+"Generate JWT — Jwts.builder().signWith(key).compact()":"https://github.com/jwtk/jjwt",
+"@PreAuthorize — method-level security":BD+"/spring-security-method-security",
+"JUnit 5 — @Test @BeforeEach @AfterEach":"https://junit.org/junit5/docs/current/user-guide/",
+"Write Dockerfile — FROM eclipse-temurin:17-jre":SG+"/spring-boot-docker",
+"docker build -t app . && docker run -p 8080:8080":SG+"/spring-boot-docker",
+"docker-compose.yml — app + postgres together":"https://docs.docker.com/compose/",
+"Read: Baeldung — Testing in Spring Boot":BD+"/spring-boot-testing",
+/* Django specifics */
+"Generic views — ListView and DetailView":DJ+"/intro/tutorial04/",
+"Django forms — write vote form handling with POST":DJ+"/intro/tutorial04/",
+"CSRF token — {% csrf_token %} in every form":DJ+"/intro/tutorial04/",
+"Always HttpResponseRedirect after POST success":DJ+"/intro/tutorial04/",
+"Add STATICFILES_DIRS — configure static files":DJ+"/intro/tutorial06/",
+"{% load static %} and {% static 'polls/style.css' %}":DJ+"/intro/tutorial06/",
+"Customise admin list display — list_display, list_filter":DJ+"/intro/tutorial07/",
+"Admin fieldsets — group fields in change form":DJ+"/intro/tutorial07/",
+"pip install django-debug-toolbar — third-party package":DJ+"/intro/tutorial08/",
+"Configure debug toolbar in INSTALLED_APPS and urls.py":DJ+"/intro/tutorial08/",
+"Serializer — class QuestionSerializer(serializers.ModelSerializer)":DRF+"/api-guide/serializers/",
+"APIView — get() and post() with Response()":DRF+"/api-guide/views/",
+"ViewSet + Router — auto-generate all CRUD endpoints":DRF+"/api-guide/viewsets/",
+"Permission classes — IsAuthenticated, IsAdminUser":DRF+"/api-guide/permissions/",
+"JWT — pip install djangorestframework-simplejwt":"https://django-rest-framework-simplejwt.readthedocs.io/en/latest/",
+"CORS — pip install django-cors-headers":"https://github.com/adamchainz/django-cors-headers",
+"Prepare for deploy — DEBUG=False, ALLOWED_HOSTS, collectstatic":DJ+"/howto/deployment/checklist/",
+"Deploy to Railway or Render with gunicorn":"https://docs.djangoproject.com/en/stable/howto/deployment/wsgi/gunicorn/",
+/* Flask specifics */
+"Read: flask.palletsprojects.com/tutorial — overview":FL+"/tutorial/",
+"python -m venv .venv && pip install flask":FL+"/installation/",
+"Create flaskr/ package directory with __init__.py":FL+"/tutorial/layout/",
+"Render template — render_template('blog/index.html')":FL+"/tutorial/templates/",
+"pip install -e . — install project as package":FL+"/tutorial/install/",
+"Deploy to Render — requirements.txt, gunicorn wsgi:app":FL+"/tutorial/deploy/",
+"Project: Flaskr fully tested and deployed":FL+"/tutorial/deploy/",
+/* fast.ai MLOps specifics */
+"Track experiments with Weights & Biases":"https://docs.wandb.ai/quickstart",
+"Serve model API with FastAPI":"https://fastapi.tiangolo.com/tutorial/",
+"Dockerfile for ML app":"https://docker-curriculum.com/",
+"Deploy to HuggingFace Spaces or Render":"https://huggingface.co/docs/hub/spaces",
+"Monitor predictions and handle latency":"https://madewithml.com/courses/mlops/monitoring/",
+"CI/CD for ML with GitHub Actions":"https://docs.github.com/en/actions",
+/* HLD — Scalability */
+"Vertical vs horizontal scaling":SDP+"#horizontal-scaling",
+"Load balancers — round-robin, least connections, IP hash":SDP+"#load-balancer",
+"CDN — push vs pull":SDP+"#content-delivery-network",
+"Caching layers — client, CDN, app, DB":SDP+"#cache",
+"Cache invalidation — write-through, write-behind, write-around":SDP+"#when-to-update-the-cache",
+"Cache eviction — LRU, LFU, FIFO":"https://en.wikipedia.org/wiki/Cache_replacement_policies",
+"Reverse proxy vs load balancer":SDP+"#reverse-proxy-web-server",
+"Microservices vs monolith":SDP+"#microservices",
+"Service discovery":SDP+"#service-discovery",
+"API gateway pattern":"https://microservices.io/patterns/apigateway.html",
+/* HLD — Databases */
+"ACID properties":SDP+"#relational-database-management-system-rdbms",
+"SQL vs NoSQL":SDP+"#sql-or-nosql",
+"Master-slave replication":SDP+"#master-slave-replication",
+"Master-master replication":SDP+"#master-master-replication",
+"Federation — functional partitioning":SDP+"#federation",
+"Sharding strategies":SDP+"#sharding",
+"Denormalization":SDP+"#denormalization",
+"SQL tuning — indexes and EXPLAIN":SDP+"#sql-tuning",
+"NoSQL types — key-value, document, column, graph":SDP+"#nosql",
+"SQL vs NoSQL decision framework":SDP+"#sql-or-nosql",
+/* HLD — Communication */
+"HTTP and HTTPS lifecycle":SDP+"#hypertext-transfer-protocol-http",
+"TCP vs UDP":SDP+"#transmission-control-protocol-tcp",
+"REST design principles":SDP+"#representational-state-transfer-rest",
+"RPC and gRPC basics":SDP+"#remote-procedure-call-rpc",
+"GraphQL — when over REST":"https://graphql.org/learn/",
+"WebSockets — full duplex":"https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API",
+"Long polling and SSE":KPS+"#long-polling-websockets-server-sent-events-sse",
+"Kafka vs RabbitMQ":KPS+"#message-brokers",
+"Pub/Sub pattern":KPS+"#publish-subscribe",
+"Idempotency and at-least-once delivery":KPS+"#message-queues",
+/* HLD — Classic designs */
+"Design URL shortener (TinyURL)":KPS+"#url-shortener",
+"Design Twitter — timeline and search":SDP+"/blob/master/solutions/system_design/twitter/README.md",
+"Design WhatsApp — messaging":KPS+"#whatsapp",
+"Design Instagram — photo sharing":HI+"/instagram",
+"Design YouTube — video streaming":HI+"/youtube",
+"Design Uber — ride sharing":HI+"/uber",
+"Design Google Drive — file storage":HI+"/dropbox",
+"Design a web crawler":SDP+"/blob/master/solutions/system_design/web_crawler/README.md",
+"Design a notification system":"https://blog.algomaster.io/p/design-a-scalable-notification-service",
+"Design a rate limiter":KPS+"#rate-limiting",
+"Design search autocomplete":"https://www.enjoyalgorithms.com/blog/design-typeahead-system/",
+"Design distributed cache (Redis)":SDP+"/blob/master/solutions/system_design/query_cache/README.md",
+"Design news feed ranking":HI+"/fb-news-feed",
+"Design ad click aggregator":HI+"/ad-click-aggregator",
+/* SOLID */
+"Single Responsibility":"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#single-responsibility-principle",
+"Open/Closed":"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#open-closed-principle",
+"Liskov Substitution":"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#liskov-substitution-principle",
+"Interface Segregation":"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#interface-segregation-principle",
+"Dependency Inversion":"https://www.digitalocean.com/community/conceptual-articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design#dependency-inversion-principle",
+"Composition over inheritance":"https://en.wikipedia.org/wiki/Composition_over_inheritance",
+"Encapsulation":"https://algomaster.io/learn/lld/encapsulation",
+"Polymorphism":"https://algomaster.io/learn/lld/polymorphism",
+/* Design patterns — refactoring.guru */
+"Singleton":RG+"/singleton","Factory Method":RG+"/factory-method","Abstract Factory":RG+"/abstract-factory","Builder":RG+"/builder","Prototype":RG+"/prototype",
+"Adapter":RG+"/adapter","Bridge":RG+"/bridge","Composite":RG+"/composite","Decorator":RG+"/decorator","Facade":RG+"/facade","Flyweight":RG+"/flyweight","Proxy":RG+"/proxy",
+"Observer":RG+"/observer","Strategy":RG+"/strategy","Command":RG+"/command","Iterator":RG+"/iterator","Template Method":RG+"/template-method","State":RG+"/state","Chain of Responsibility":RG+"/chain-of-responsibility","Mediator":RG+"/mediator",
+/* LLD classic problems */
+"Design Parking Lot":ALD+"/parking-lot.md",
+"Design Library Management System":ALD+"/library-management-system.md",
+"Design Elevator System":ALD+"/elevator-system.md",
+"Design Chess Game":ALD+"/chess-game.md",
+"Design ATM Machine":ALD+"/atm.md",
+"Design Hotel Booking System":ALD+"/hotel-management-system.md",
+"Design Movie Ticket Booking":ALD+"/movie-ticket-booking-system.md",
+"Design LRU Cache (HashMap + DLL)":ALD+"/lru-cache.md",
+"Design Rate Limiter (token bucket)":KPS+"#rate-limiting",
+"Design Pub/Sub System":ALD+"/pub-sub-system.md"
+};
+function resolveLink(t,g,item){
+  if(ITEM_LINKS[item])return ITEM_LINKS[item];
+  if(t.id==='dsa'){
+    if(NC_PREMIUM[item])return 'https://neetcode.io/problems/'+NC_PREMIUM[item];
+    return 'https://leetcode.com/problems/'+(LC_EXC[item]||lcSlug(item))+'/';
+  }
+  if(GROUP_LINKS[g.g])return GROUP_LINKS[g.g];
+  return t.courses[0].url;
+}
+
 const TOTAL=TRACKS.reduce((a,t)=>a+t.groups.reduce((b,g)=>b+g.items.length,0),0);
 let state={},dailyLog={};
 try{state=JSON.parse(localStorage.getItem('cer6_s')||'{}')}catch(e){}
@@ -290,7 +568,8 @@ function buildUI(){
       html+=`<div class="group-hd">${g.g}${pm}</div><div class="items">`;
       g.items.forEach((item,ii)=>{
         const k=ikey(t.id,gi,ii),done=state[k]?'done':'';
-        html+=`<div class="item ${done}" id="i_${k}" onclick="toggle('${t.id}',${gi},${ii})"><div class="cb2"><span class="ck">&#10003;</span></div><span class="item-txt">${item}</span><span class="item-num">${gi+1}.${ii+1}</span></div>`;
+        const lk=resolveLink(t,g,item);
+        html+=`<div class="item ${done}" id="i_${k}" onclick="toggle('${t.id}',${gi},${ii})"><div class="cb2"><span class="ck">&#10003;</span></div><span class="item-txt">${item}</span><a class="item-link" href="${lk}" target="_blank" rel="noopener" title="Open best free resource for this topic" onclick="event.stopPropagation()">&#8599;</a><span class="item-num">${gi+1}.${ii+1}</span></div>`;
       });
       html+='</div>';
     });
